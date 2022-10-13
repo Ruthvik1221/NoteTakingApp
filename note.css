@@ -1,0 +1,39 @@
+  body{
+    background-image: url("1.jpg");
+  background-repeat: no-repeat;   
+    background-size: 100%;
+    background-position: center;
+    background-attachment: fixed; 
+    height: 200px;
+  }
+  ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:rgb(17, 216, 183) ;
+  }
+  
+  li {
+    float: right;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: #111;
+  }
+
+  .flexbox{
+    display: flexbox;
+    flex-direction: row;
+  }
+  .photo img{
+    border: solid;
+  }
