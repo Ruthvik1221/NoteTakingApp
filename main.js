@@ -16,23 +16,23 @@ function loginpageFunction(e)
     class User{
         constructor(username,password)
         {
-            this.uname=username;
-            this.pword=password;
+            this.username=username;
+            this.password=password;
         }
     
     
     
     getuname(){
-        return this.uname;
+        return this.username;
     }
     setuname(newusername){
-        this.uname = username;
+        this.username = username;
     }
     getpword(){
-        return this.pword;
+        return this.password;
     }
     setpword(newpassword){
-        this.pword = password
+        this.password = password
     }
 
     }
@@ -98,7 +98,7 @@ function notepageFunction(e)
     class User{
         constructor(note)
         {
-            this.tnotes=note;
+            this.notes=note;
         }
     
     
@@ -106,7 +106,7 @@ function notepageFunction(e)
         return this.tnotes;
     }
     settnotes(note){
-        this.tnotes = note;
+        this.notes = note;
     }
    
 
