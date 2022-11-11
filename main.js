@@ -4,21 +4,21 @@ class king
     constructor(fname,lname,email,password)
     {
 
-    this.FN=fname;
-    this.LN=lname;
-    this.email=email;
+    this.FirstName=fname;
+    this.LastName=lname;
+    this.username=email;
     this.PWD=password;
 
     }
     getfirstname(){
-        return this.FN;
+        return this.FirstName;
     
     }
     getlastname(){
-        return this.LN;
+        return this.LastName;
     }
     getusername(){
-        return this.email;
+        return this.username;
 
     }
     getpassword()
