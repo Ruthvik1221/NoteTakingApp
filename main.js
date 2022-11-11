@@ -7,7 +7,7 @@ class king
     this.FirstName=fname;
     this.LastName=lname;
     this.username=email;
-    this.PWD=password;
+    this.password=password;
 
     }
     getfirstname(){
@@ -23,7 +23,7 @@ class king
     }
     getpassword()
     {
-        return this.PWD;
+        return this.password;
 
     }
     getPassword()
