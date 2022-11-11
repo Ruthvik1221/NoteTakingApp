@@ -92,7 +92,7 @@ function reguser(r){
 let notes= document.getElementById("notepage");
 if(notes) notes.addEventListener('submit',Notespage)
 
-function page(b){
+function Notespage(b){
     b.preventDefault();
     let Notepage= document.getElementById("notes").value;
     let usernotes= new king(Notepage);
