@@ -6,11 +6,11 @@ Registration Page :
  "Username"
  "Password"
 
-Login Page
+Login Page:
  "Username"
  "Password"
 
-Notes Page
+Notes Page:
 "Upload notes" (CRUD operations)
 
 <image src="er.JPG">
