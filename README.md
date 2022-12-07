@@ -13,4 +13,4 @@ Login Page:
 Notes Page:
 "Upload notes" (CRUD operations)
 
-<image src="er.JPG">
+<image src="/public/images/er.JPG">
