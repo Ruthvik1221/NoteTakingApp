@@ -21,6 +21,17 @@ router
     }
   })
 
+  .post('/create', async (req,res) => {
+    try{
+      console.log(req.body)
+      let note = await Note.createNote(req.body);
+      res.send({...note})
+    } catch(err) {
+      res.ststus(401).send({message: err.message});
+    }
+
+  })
+
  
   .put('/editNotes', async (req, res) => {
     try {
