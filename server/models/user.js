@@ -11,7 +11,7 @@ const con = require("./db_connect");
 async function createTable() {
   let sql=`CREATE TABLE IF NOT EXISTS users (
     userID INT NOT NULL AUTO_INCREMENT,
-    userName VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL UNIQUE,
     firstname VARCHAR(225) NOT NULL,
     lastname VARCHAR(225) NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -33,8 +33,8 @@ async function register(user) {
   let cUser = await getUser(user);
   if(cUser.length > 0) throw Error("Username already in use");
 
-  const sql = `INSERT INTO users (userName, password)
-    VALUES ("${user.userName}", "${user.password}");
+  const sql = `INSERT INTO users (username, password)
+    VALUES ("${user.username}", "${user.password}");
   `
   await con.query(sql);
   return await login(user);
@@ -54,7 +54,7 @@ async function login(user) { // {userName: "sda", password: "gsdhjsga"}
 // Update User function
 async function editUser(user) {
   let sql = `UPDATE users 
-    SET userName = "${user.userName}"
+    SET username = "${user.username}"
     WHERE userID = ${user.userID}
   `;
 
@@ -83,7 +83,7 @@ async function getUser(user) {
   } else {
     sql = `
     SELECT * FROM users 
-      WHERE userName = "${user.userName}"
+      WHERE username = "${user.username}"
   `;
   }
   return await con.query(sql);  
