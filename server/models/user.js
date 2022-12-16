@@ -30,12 +30,12 @@ async function getAllUsers() {
 
 // Create  User - Registering
 async function register(user) {
-  console.log(user)
+  //console.log(user)
   let cUser = await getUser(user);
   if(cUser.length > 0) throw Error("Username already in use");
 
   const sql = `INSERT INTO users (username,firstname,lastname,password)
-    VALUES ("${user.username}","${user.firstName}","${user.lastName}","${user.password}");
+    VALUES ("${user.userName}","${user.firstName}","${user.lastName}","${user.password}");
   `
   await con.query(sql);
   return await login(user);
@@ -43,10 +43,10 @@ async function register(user) {
 // Read User -- login user
 async function login(user) { // {userName: "sda", password: "gsdhjsga"}
   let cUser = await getUser(user); //[{userName: "cathy123", password: "icecream"}]
-  //console.log("cUser;;;;;", cUser)
+  
   if(!cUser[0]) throw Error("Username not found");
   if(cUser[0].password !== user.password) throw Error("Password incorrect");
-  console.log(cUser[0]);
+ 
   return cUser[0];
 
 }
@@ -54,8 +54,8 @@ async function login(user) { // {userName: "sda", password: "gsdhjsga"}
 // Update User function
 async function editUser(user) {
   let sql = `UPDATE users 
-    SET username = "${user.username}"
-    WHERE userID = ${user.userID}
+    SET username = "${user.userName}"
+    WHERE userID = "${user.userID}"
   `;
 
   await con.query(sql);
@@ -66,8 +66,8 @@ async function editUser(user) {
 // Delete User function
 async function deleteUser(user) {
   let sql = `DELETE FROM users
-    WHERE userID = ${user.userID}
-  `
+    WHERE userID = "${user.userID}"
+  `;
   await con.query(sql);
 }
 
@@ -78,12 +78,12 @@ async function getUser(user) {
   if(user.userID) {
     sql = `
       SELECT * FROM users
-       WHERE userID = ${user.userID}
-    `
+       WHERE userID = "${user.userID}"
+    `;
   } else {
     sql = `
     SELECT * FROM users 
-      WHERE username = "${user.username}"
+      WHERE username = "${user.userName}"
   `;
   }
   return await con.query(sql);  
