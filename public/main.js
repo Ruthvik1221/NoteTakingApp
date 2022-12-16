@@ -47,7 +47,7 @@ function register(e) {
   let userLname = document.getElementById("lastname").value;
   let password = document.getElementById("password").value;
   let user = new User(userName,password, userFname, userLname);
-  console.log(user)
+  //console.log(user)
   fetchData("/users/register", user, "POST")
   .then((data) => {
     setCurrentUser(data);
