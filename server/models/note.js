@@ -1,4 +1,5 @@
-
+let getNotes = () => notes;
+module.export = { getNotes }
 const con = require("./db_connect");
 
 // Table Creation 
@@ -18,13 +19,16 @@ createTable();
 async function getAllNotes() {
   const sql = `SELECT * FROM notes;`;
   let notes = await con.query(sql);
-  console.log(notes)
+  return notes;
 }
+
+getAllNotes();
 
 //create notes
 async function createNote(note){
-  const sql=`INSERT INTO notes(noteContent) VALUES ("${note.noteContent}");`
+  const sql=`INSERT INTO notes (userID,noteContent) VALUES ("${note.userID}","${note.noteContent}");`
   await con.query(sql);
+  return {message:"successfully added notes"};
 }
 
 
@@ -39,7 +43,7 @@ async function Read(note) { //content:"hello world"
 async function editNotes(note) {
   let sql = `UPDATE notes 
     SET noteContent = "${note.noteContent}"
-    WHERE userID = ${note.userID}
+    WHERE userID = "${note.userID}"
   `;
 
   await con.query(sql);
@@ -50,7 +54,7 @@ async function editNotes(note) {
 // Delete Note function
 async function deleteNote(note) {
   let sql = `DELETE FROM notes
-    WHERE userID = ${note.userID}
+    WHERE userID = "${note.userID}"
   `
   await con.query(sql);
 }
@@ -62,8 +66,8 @@ async function getNote(note) {
   if(note.userID) {
     sql = `
       SELECT * FROM notes
-       WHERE userID = ${note.userID}
-    `
+       WHERE userID = "${note.userID}"
+    `;
   } else {
     sql = `
     SELECT * FROM notes 
