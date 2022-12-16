@@ -114,7 +114,7 @@ if(user&&note) getallnotes();
 
 function getallnotes(){
 let notedata =document.getElementById("note");
-fetchData("/notes/getNotes",user,"POST")
+fetchData("/notes/getNote",user,"POST")
 .then((data)=>{
   console.log(data);
   for(let i=0;i<data.length;i++){
