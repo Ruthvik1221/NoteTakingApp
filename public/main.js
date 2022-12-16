@@ -11,44 +11,30 @@ async function fetchData(route = '', data = {}, methodType) {
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     body: JSON.stringify(data) // body data type must match "Content-Type" header
   });
+  if(response.ok) {
+    return await response.json(); // parses JSON response into native JavaScript objects
+  } else {
+    throw await response.json();
+  }
+}
 
 // user class
 class User {
-  constructor(username,firstname,lastname,password) {
-    this.username = username;
-    this.firstName = firstname;
-    this.lastName=lastname,
+  constructor(userName,password,firstName,lastName) {
+    this.userName = userName;
     this.password = password;
+    this.firstName = firstName;
+    this.lastName= lastName;
   }
 
   getUsername() {
-    return this.username;
+    return this.userName;
+  }
+  getPassword(){
+    return this.password;
   }
 }
 
-
-// login functionality
-let loginForm = document.getElementById("loginpage");
-if(loginForm) loginForm.addEventListener('submit', login);
-
-function login(e) {
-  e.preventDefault();
-
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
-  let user = new User(username,password);
-//console.log(user)
-  fetchData("/users/login", user, "POST")
-  .then((data) => {
-    setCurrentUser(data);
-    alert("login] success");
-    window.location.href = "note.html";
-  })
-  .catch((err) => {
-    console.log(`Error!!! ${err.message}`)
-  }) 
-}
- 
 // register functionality
 let regForm = document.getElementById("registerpage");
 if(regForm) regForm.addEventListener('submit', register);
@@ -56,22 +42,46 @@ if(regForm) regForm.addEventListener('submit', register);
 function register(e) {
   e.preventDefault();
 
-  let username = document.getElementById("username").value;
-  let firstname = document.getElementById("firstname").value;
-  let lastname = document.getElementById("lastname").value;
+  let userName = document.getElementById("username").value;
+  let userFname = document.getElementById("firstname").value;
+  let userLname = document.getElementById("lastname").value;
   let password = document.getElementById("password").value;
-  let user = new User(username, password,firstname, lastname );
+  let user = new User(userName,password, userFname, userLname);
   console.log(user)
   fetchData("/users/register", user, "POST")
   .then((data) => {
     setCurrentUser(data);
-    alert("registration success");
+    alert("registration success")
     window.location.href = "note.html";
   })
   .catch((err) =>{
     console.log(err);
   })
 }
+  
+// login functionality
+let loginForm = document.getElementById("loginpage");
+if(loginForm) loginForm.addEventListener('submit', login);
+
+function login(e) {
+  e.preventDefault();
+
+  let userName = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+  let user = new User(userName,password);
+  
+//console.log(user)
+  fetchData("/users/login", user, "POST")
+  .then((data) => {
+    setCurrentUser(data);
+    alert("Successfully logged-in")
+    window.location.href = "note.html";
+  })
+  .catch((err) => {
+    console.log(`Error!!! ${err.message}`)
+  }) 
+}
+ 
 //Note Functionality
 class Note{
   constructor(noteContent) {
@@ -83,10 +93,10 @@ class Note{
 }
 let user=getCurrentUser();
 let note = document.getElementById("notepage");
-if(note) note.addEventListener('submit',notePageFunction)
+if(note) note.addEventListener("submit",notePageFunction)
 function notePageFunction(e){
   e.preventDefault();
-  let noted= document.getElementById('note').value;
+  let noted= document.getElementById("note").value;
   const note = new Note(noted);
   note.userID = user.userID;
   fetchData("/notes/create", note, "POST")
@@ -103,12 +113,12 @@ document.getElementById("notepage").reset();
 if(user&&note) getallnotes();
 
 function getallnotes(){
-let notedata =document.getElementById('note');
-fetchData("/notes/getNote",user,"POST")
+let notedata =document.getElementById("note");
+fetchData("/notes/getNotes",user,"POST")
 .then((data)=>{
   console.log(data);
   for(let i=0;i<data.length;i++){
-    notedata.value+=data[i].noteContent;
+    notedata.value=data[i].noteContent;
   }
 })
 }
@@ -131,4 +141,5 @@ function removeCurrentUser() {
   localStorage.removeItem('user');
   window.location.href="login.html";
 }
-}
+
+//  module.exports = {getAllNotes};
