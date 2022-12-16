@@ -1,55 +1,95 @@
+/*
+let user = {
+  userID: 5,
+  userName: "cathy123",
+  password: "icecream2"
+}; 
+*/
+const con = require("./db_connect");
 
-const express = require('express');
-const User = require('../models/user');
-const router = express.Router();
+// Table Creation 
+async function createTable() {
+  let sql=`CREATE TABLE IF NOT EXISTS users (
+    userID INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    firstname VARCHAR(225) NOT NULL,
+    lastname VARCHAR(225) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    CONSTRAINT userPK PRIMARY KEY(userID)
+  ); `
+  await con.query(sql);
+}
+createTable();
 
-router
-  .get('/', async (req, res) => {
-    try {
-      const users = await User.getAllUsers();
-      res.send(users);
-    } catch(err) {
-      res.status(401).send({message: err.message});
-    }
-  })
+// grabbing all users in database
+async function getAllUsers() {
+  const sql = `SELECT * FROM users;`;
+  let users = await con.query(sql);
+  console.log(users)
+}
 
-  .post('/login', async (req, res) => {
-    try {
-      let user = await User.login(req.body);
-      res.send({...user, password: undefined})
-    } catch(err) {
-      res.status(401).send({message: err.message});
-    }
-  })
+// Create  User - Registering
+async function register(user) {
+  console.log(user)
+  let cUser = await getUser(user);
+  if(cUser.length > 0) throw Error("Username already in use");
 
-  .post('/register', async (req, res) => {
-    try {
-      let user = await User.register(req.body);
-      res.send({...user, password: undefined})
-    } catch(err) {
-      res.status(401).send({message: err.message});
-    }
-  })
+  const sql = `INSERT INTO users (username,firstname,lastname,password)
+    VALUES ("${user.username}","${user.firstName}","${user.lastName}","${user.password}");
+  `
+  await con.query(sql);
+  return await login(user);
+}
+// Read User -- login user
+async function login(user) { // {userName: "sda", password: "gsdhjsga"}
+  let cUser = await getUser(user); //[{userName: "cathy123", password: "icecream"}]
+  //console.log("cUser;;;;;", cUser)
+  if(!cUser[0]) throw Error("Username not found");
+  if(cUser[0].password !== user.password) throw Error("Password incorrect");
+  console.log(cUser[0]);
+  return cUser[0];
 
-  .put('/edit', async (req, res) => {
-    try {
-      let user = await User.editUser(req.body);
-      res.send({...user, password: undefined});
-    } catch(err) {
-      res.status(401).send({message: err.message})
-    }
-  })
+}
 
-  .delete('/delete', async (req, res) => {
-    try {
-      User.deleteUser(req.body);
-      res.send({success: "We'll Miss You... :("})
-    } catch(err) {
-      res.status(401).send({message: err.message})
-    }
-  })
+// Update User function
+async function editUser(user) {
+  let sql = `UPDATE users 
+    SET username = "${user.username}"
+    WHERE userID = ${user.userID}
+  `;
+
+  await con.query(sql);
+  let updatedUser = await getUser(user);
+  return updatedUser[0];
+}
+
+// Delete User function
+async function deleteUser(user) {
+  let sql = `DELETE FROM users
+    WHERE userID = ${user.userID}
+  `
+  await con.query(sql);
+}
+
+// Useful Functions
+async function getUser(user) {
+  let sql;
+
+  if(user.userID) {
+    sql = `
+      SELECT * FROM users
+       WHERE userID = ${user.userID}
+    `
+  } else {
+    sql = `
+    SELECT * FROM users 
+      WHERE username = "${user.username}"
+  `;
+  }
+  return await con.query(sql);  
+}
 
 
 
-  
-module.exports = router;
+module.exports = { getAllUsers, login, register, editUser, deleteUser};
+
